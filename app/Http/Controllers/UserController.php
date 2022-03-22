@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function register(Request $request) {
         if (User::where('email', $request->email)->exists()) {
-            return response()->json(['status'=>400,'error'=>'This email already exists!']);
+            return response()->json(['error'=>'This email already exists!', 400]);
          }
 
         $validator = Validator::make($request->all(), [
@@ -46,7 +46,7 @@ class UserController extends Controller
             'password' => 'required|min:6'
         ]);
         if(!Auth::attempt($validator)){
-            return response(['status'=>400, 'error' => 'Incorrect email or password']);
+            return response(['error' => 'Incorrect email or password', 400]);
         }
        
         $user = Auth::user();
