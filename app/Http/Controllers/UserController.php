@@ -46,7 +46,7 @@ class UserController extends Controller
             'password' => 'required|min:6'
         ]);
         if(!Auth::attempt($validator)){
-            return response(['error' => 'Incorrect email or password', 400]);
+            return response()->json(['error' => 'Incorrect email or password', 400]);
         }
        
         $user = Auth::user();
