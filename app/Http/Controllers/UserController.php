@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function register(Request $request) {
         if (User::where('email', $request->email)->exists()) {
-            return response()->json('This email already exists!');
+            return response()->json(['status'=>400,'error'=>'This email already exists!']);
          }
 
         $validator = Validator::make($request->all(), [
@@ -28,16 +28,16 @@ class UserController extends Controller
         ]);
         $errors = $validator->errors();
         if($errors->any()){
-            return response()->json($errors->first());
+            return response()->json($errors, 400);
         }
-       
+               
         $user = new User;
         $user->name=$request->input('name');
         $user->email=$request->input('email');
         $user->password=Hash::make($request->input('password'));
         $user->avatar=$request->input('avatar');
         $user->save();
-        return $user;
+        return response()->json($user);
     }
 
     public function login(Request $request) {
@@ -46,12 +46,12 @@ class UserController extends Controller
             'password' => 'required|min:6'
         ]);
         if(!Auth::attempt($validator)){
-            return response(['message' => 'Incorrect email or password']);
+            return response(['status'=>400, 'error' => 'Incorrect email or password']);
         }
-        
+       
         $user = Auth::user();
         $token = $user->createToken('login')->accessToken;
-            return response([$user, $token, 200]);
+            return response()->json($token, 200);
     }
  
 }
