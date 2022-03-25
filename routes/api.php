@@ -23,8 +23,7 @@ use App\Http\Controllers\UserController;
 Route::get('/posts', [NewsController::class, 'getAllPosts']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
+Route::middleware('auth:api')->get('/users/{id}', [UserController::class, 'getOtherUser']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
