@@ -25,5 +25,6 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:api')->get('/users/{id}', [UserController::class, 'getOtherUser']);
+Route::middleware('auth:api')->post('/posts', [NewsController::class, 'addPost']);
 
 
