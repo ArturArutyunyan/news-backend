@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Http; 
-
-
 
 class UserController extends Controller
 {
@@ -53,8 +52,37 @@ class UserController extends Controller
         $token = $user->createToken('login')->accessToken;
             return response()->json(['token'=>$token, 'user'=>$user, 200]);
     }
- 
+
+    public function getUser(Request $request) {
+        $user_id = $request->user()->id;
+        $user = User::find($user_id);
+        $user_posts = $user->posts()->get();
+            return response()->json(['user'=>$user, 'user_posts'=>$user_posts, 200]);
+    }
+
+    public function getOtherUser(Request $request, $id) {
+    if (!User::where('id', $id)->exists()) {
+        return response()->json('There is not such user!');
+     }
+    
+    $user_id = $request->user()->id;
+
+    if($user_id == $id) {
+        $user = User::find($user_id);
+        $isAuth = true;
+    } else {
+        $user = User::find($id);
+        $isAuth = false;
+    }
+   
+    $user_posts = $user->posts()->get();
+        return response()->json(['user'=>$user, 'isAuth'=>$isAuth, 'user_posts'=>$user_posts, 200]);;
+    }
+
 }
+
+
+
 
 
 
