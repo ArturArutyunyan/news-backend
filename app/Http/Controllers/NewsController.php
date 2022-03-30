@@ -17,12 +17,12 @@ class NewsController extends Controller
             'content' => 'required|min:1|max:300',
             'tag' => 'required|min:1|max:150',
             'user_id' => 'min:1|max:100',
-            'image' => 'required|min:1|max:250',
+            'image' => 'required',
         ]);
     
         $errors = $validator->errors();
             if($errors->any()){
-                return response()->json($errors->first());
+                return response()->json($errors, 400);
             }
     
         $post = new Post;
@@ -30,7 +30,14 @@ class NewsController extends Controller
         $post->content = $request->content;
         $post->tag = $request->tag;
         $post->user_id = $request->user()->id;
-        $post->image = $request->image;
+
+        if($request->hasFile('image')) {
+        $destination_path = 'public/images/posts';
+        $image = $request->file('image');
+        $image_name = $image->getClientOriginalName();
+        $path = $request->file('image')->storeAs($destination_path, $image_name);
+        $post->image = $image_name;
+        }
         $post->save();
         
         return response()->json(['post' => $post, 'message' => 'Your post was created!' , 200]);
@@ -39,14 +46,3 @@ class NewsController extends Controller
 
 }
 
-
-
-
-// if($request->hasFile('image')) {
-//     $destination_path = 'public/images/posts';
-//     $image = $request->file('image');
-//     $image_name = $image->getClientOriginalName();
-//     $path = $request->file('image')->storeAs($destination_path, $image_name);
-
-//     $post->image = $image_name;
-// }
