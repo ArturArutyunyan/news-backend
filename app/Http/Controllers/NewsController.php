@@ -31,14 +31,8 @@ class NewsController extends Controller
         $post->tag = $request->tag;
         $post->user_id = $request->user()->id;
 
-        if($request->hasFile('image')) {
-        $destination_path = 'public/images/posts';
-        $image = $request->file('image');
-        $image_name = $image->getClientOriginalName();
-        $path = $request->file('image')->storeAs($destination_path, $image_name);
-        $post->image = $image_name;
-        }
-        
+        if($request->hasFile('image')) saveImage('posts', 'image', $request, $post);     
+           
         $post->save();
         return response()->json(['post' => $post, 'message' => 'Your post was created!' , 200]);
     }

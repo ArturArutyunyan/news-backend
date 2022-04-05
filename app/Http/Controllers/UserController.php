@@ -78,13 +78,7 @@ class UserController extends Controller
             $user->name = $request->name;
         };
 
-        if($request->hasFile('avatar')) {
-            $destination_path = 'public/images/users';
-            $avatar = $request->file('avatar');
-            $avatar_name = $avatar->getClientOriginalName();
-            $path = $request->file('avatar')->storeAs($destination_path, $avatar_name);
-            $user->avatar = $avatar_name;
-            }
+        if($request->hasFile('avatar')) saveImage('users', 'avatar', $request, $user);
 
         $user->save();
         $user_posts = $user->posts()->get();
@@ -93,13 +87,6 @@ class UserController extends Controller
 
 }
 
-//  function($dirName, $prop){
-//     $destination_path = 'public/images/$dirName';
-//     $prop = $request->file($prop);
-//     $prop_name = $prop->getClientOriginalName();
-//     $path = $request->file($prop)->storeAs($destination_path, $prop_name);
-//     $user->$prop = $prop_name;
-// }
 
 
 
