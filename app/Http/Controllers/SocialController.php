@@ -24,8 +24,8 @@ class SocialController extends Controller
             $user->email=$request->email;
             $user->password=Hash::make("user");
             $user->avatar=$request->imageUrl;
-            $user->save();
 
+            $user->save();
             $token = $user->createToken('login')->accessToken;
                 return response()->json(['user'=>$user, 'token'=>$token, 200]);
         }

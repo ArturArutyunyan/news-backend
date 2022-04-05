@@ -38,8 +38,8 @@ class NewsController extends Controller
         $path = $request->file('image')->storeAs($destination_path, $image_name);
         $post->image = $image_name;
         }
-        $post->save();
         
+        $post->save();
         return response()->json(['post' => $post, 'message' => 'Your post was created!' , 200]);
     }
 

@@ -72,9 +72,8 @@ class UserController extends Controller
     }
 
     public function updateUser(Request $request) {
-        $user_id = $request->user()->id;
-        $user = User::find($user_id);
-        
+        $user = Auth::user();
+
         if($request->name ) {
             $user->name = $request->name;
         };
@@ -93,6 +92,14 @@ class UserController extends Controller
     }
 
 }
+
+//  function($dirName, $prop){
+//     $destination_path = 'public/images/$dirName';
+//     $prop = $request->file($prop);
+//     $prop_name = $prop->getClientOriginalName();
+//     $path = $request->file($prop)->storeAs($destination_path, $prop_name);
+//     $user->$prop = $prop_name;
+// }
 
 
 
