@@ -61,7 +61,7 @@ class UserController extends Controller
             return response()->json(['user'=>$user, 'user_posts'=>$user_posts, 200]);
     }
 
-    public function getOtherUser(Request $request, $id) {
+    public function getUserById(Request $request, $id) {
         $user = User::find($id);
 
         if (!$user) {
@@ -83,8 +83,7 @@ class UserController extends Controller
         };
 
         $user->save();
-        $user_posts = $user->posts()->get();
-        return response()->json(['user'=>$user,'user_posts'=>$user_posts, 200]);
+        return response()->json(['user'=>$user, 200]);
     }
 
 }

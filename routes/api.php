@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix'=>'user'], function(){
         Route::get('/', [UserController::class, 'getUser']);
         Route::post('/', [UserController::class, 'updateUser']);
-        Route::get('/{id}', [UserController::class, 'getOtherUser']);
+        Route::get('/{id}', [UserController::class, 'getUserById']);
     });
     Route::post('/posts', [NewsController::class, 'addPost']);
 });

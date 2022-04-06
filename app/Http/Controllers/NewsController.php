@@ -30,8 +30,7 @@ class NewsController extends Controller
         $post->title = $request->title;
         $post->content = $request->content;
         $post->tag = $request->tag;
-        $post->user_id = $request->user()->id;
-        // $post->user_id = Auth::user()->id;
+        $post->user_id = Auth::user()->id;
 
         if($request->hasFile('image')) {
             saveImage('posts', 'image', $request, $post); 

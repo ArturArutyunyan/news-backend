@@ -12,23 +12,19 @@ class SocialController extends Controller
     public function googleRedirect(Request $request) 
     {
         $user = User::where('email', $request->email)->first();
-        if ($user) {
-            $user->name = $request->name;
-            $user->avatar = $request->imageUrl;
-            $token = $user->createToken('login')->accessToken;
-            $user->save();
-            return response()->json(['user'=>$user, 'token'=>$token, 200]);           
-        } else {
-            $user = new User;
-            $user->name=$request->name;
-            $user->email=$request->email;
-            $user->password=Hash::make("user");
-            $user->avatar=$request->imageUrl;
+        $currentUser = $user ? $user : new User;
 
-            $user->save();
-            $token = $user->createToken('login')->accessToken;
-                return response()->json(['user'=>$user, 'token'=>$token, 200]);
+        if (!$user) {
+            $currentUser->email=$request->email;
+            $currentUser->password=Hash::make("user");
         }
+
+        $currentUser->name = $request->name;
+        $currentUser->avatar = $request->imageUrl; 
+
+        $currentUser->save();
+        $token = $currentUser->createToken('login')->accessToken;
+            return response()->json(['user'=>$currentUser, 'token'=>$token, 200]);
     }
 }
 
