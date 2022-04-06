@@ -16,7 +16,7 @@ class SocialController extends Controller
 
         if (!$user) {
             $currentUser->email=$request->email;
-            $currentUser->password=Hash::make("user");
+            $currentUser->password=Hash::make($request->googleId);
         }
 
         $currentUser->name = $request->name;
@@ -27,5 +27,3 @@ class SocialController extends Controller
             return response()->json(['user'=>$currentUser, 'token'=>$token, 200]);
     }
 }
-
-

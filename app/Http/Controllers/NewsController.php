@@ -17,7 +17,6 @@ class NewsController extends Controller
             'title' => 'required|min:1|max:150',
             'content' => 'required|min:1|max:300',
             'tag' => 'required|min:1|max:150',
-            'user_id' => 'min:1|max:100',
             'image' => 'required',
         ]);
     
