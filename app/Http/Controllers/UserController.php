@@ -78,7 +78,9 @@ class UserController extends Controller
             $user->name = $request->name;
         };
 
-        if($request->hasFile('avatar')) saveImage('users', 'avatar', $request, $user);
+        if($request->hasFile('avatar')) {
+            saveImage('users', 'avatar', $request, $user);
+        };
 
         $user->save();
         $user_posts = $user->posts()->get();

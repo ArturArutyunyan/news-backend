@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -30,11 +31,14 @@ class NewsController extends Controller
         $post->content = $request->content;
         $post->tag = $request->tag;
         $post->user_id = $request->user()->id;
+        // $post->user_id = Auth::user()->id;
 
-        if($request->hasFile('image')) saveImage('posts', 'image', $request, $post);     
+        if($request->hasFile('image')) {
+            saveImage('posts', 'image', $request, $post); 
+        };    
            
         $post->save();
-        return response()->json(['post' => $post, 'message' => 'Your post was created!' , 200]);
+        return response()->json(['post' => $post, 'message' => 'Your post was created!', 200]);
     }
 
 
