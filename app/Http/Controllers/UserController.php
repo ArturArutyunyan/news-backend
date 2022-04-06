@@ -23,8 +23,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:1',
             'email' => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
         ]);
+
         $errors = $validator->errors();
         if($errors->any()){
             return response()->json($errors, 400);
@@ -60,23 +61,29 @@ class UserController extends Controller
             return response()->json(['user'=>$user, 'user_posts'=>$user_posts, 200]);
     }
 
-    public function getOtherUser(Request $request, $id) {
-    if (!User::where('id', $id)->exists()) {
-        return response()->json('There is not such user!');
-     }
-    
-    $user_id = $request->user()->id;
-
-    if($user_id == $id) {
-        $user = User::find($user_id);
-        $isAuth = true;
-    } else {
+    public function getUserById(Request $request, $id) {
         $user = User::find($id);
-        $isAuth = false;
+
+        if (!$user) {
+            return response()->json('There is not such user!');
+        }
+
+        return response()->json(['user' => $user, 'user_posts' => $user->posts, 200]);
     }
-   
-    $user_posts = $user->posts()->get();
-        return response()->json(['user'=>$user, 'isAuth'=>$isAuth, 'user_posts'=>$user_posts, 200]);;
+
+    public function updateUser(Request $request) {
+        $user = Auth::user();
+
+        if($request->name ) {
+            $user->name = $request->name;
+        };
+
+        if($request->hasFile('avatar')) {
+            saveImage('users', 'avatar', $request, $user);
+        };
+
+        $user->save();
+        return response()->json(['user'=>$user, 200]);
     }
 
 }

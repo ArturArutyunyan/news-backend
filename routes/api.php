@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SocialController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,14 @@ use App\Http\Controllers\UserController;
 Route::get('/posts', [NewsController::class, 'getAllPosts']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
-Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
-Route::middleware('auth:api')->get('/users/{id}', [UserController::class, 'getOtherUser']);
+Route::post('/auth/google', [SocialController::class, 'googleRedirect']);
 
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::group(['prefix'=>'user'], function(){
+        Route::get('/', [UserController::class, 'getUser']);
+        Route::post('/', [UserController::class, 'updateUser']);
+        Route::get('/{id}', [UserController::class, 'getUserById']);
+    });
+    Route::post('/posts', [NewsController::class, 'addPost']);
+});
 
